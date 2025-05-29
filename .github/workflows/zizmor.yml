@@ -11,7 +11,7 @@ permissions: {}
 
 jobs:
   run-zizmor-scan:
-    name: Run zizmor scan
+    name: Run Zizmor scan
     runs-on: ubuntu-latest
     permissions:
       contents: read
