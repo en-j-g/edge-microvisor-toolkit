@@ -1,3 +1,4 @@
+---
 name: GitHub Actions Security Analysis with zizmor 🌈
 
 on:
@@ -27,7 +28,7 @@ jobs:
 
       - name: Run zizmor 🌈
         run: uvx zizmor=="$ZIZMOR_VERSION" "$GITHUB_WORKSPACE" --format sarif > zizmor_scan_report.sarif
-        
+
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@60168efe1c415ce0f5521ea06d5c2062adbeed1b  # v3.28.17
         with:
