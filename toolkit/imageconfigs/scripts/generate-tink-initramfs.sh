@@ -25,25 +25,26 @@ function generate_images() {
 
     tar -xvf "/tmp/$arfname.tar.gz" -C "$outputdir" --strip-components=2 --wildcards ./boot/vmlinuz-*.emt3 ./boot/initramfs-*.emt3.img
     gunzip -f "/tmp/$arfname.tar.gz"
-    tar -vf "/tmp/$arfname.tar" --delete ./tmp ./boot
+    tar -vf "/tmp/$arfname.tar" --delete ./tmp
+    tar -vf "/tmp/$arfname.tar" --delete --wildcards ./boot/vmlinuz-*.emt3 ./boot/initramfs-*.emt3.img ./boot/System.map-*.emt3 ./boot/config-*.emt3
     gzip -f "/tmp/$arfname.tar"
     #cp "/tmp/$arfname.tar.gz" "$outputdir"
 
     ramfs=$(find $outputdir -type f -name initramfs*img -printf '%f\n')
-    echo "pprefix: Original $ramfs $(sync;du -h $outputdir/$ramfs)"
+    echo "$pprefix: Original $ramfs $(sync;du -h $outputdir/$ramfs)"
     # unzip initramfs
     mkdir -p /tmp/initramfs
     cd /tmp/initramfs
-    echo "pprefix: inside $(pwd)"
-    echo "pprefix: unziping initial initramfs for repack"
+    echo "$pprefix: inside $(pwd)"
+    echo "$pprefix: unziping initial initramfs for repack"
     gunzip -c -k "$outputdir/$ramfs" | cpio -idmv --no-absolute-filenames
-    #echo "pprefix: free space $(df -h)"
+    #echo "$pprefix: free space $(df -h)"
 
     cp "/tmp/$arfname.tar.gz" /tmp/initramfs/
     find . | cpio -o -H newc | gzip > "$outputdir/$ramfs"
     cd -
 
-    echo "pprefix: $(sync;du -h $outputdir/$ramfs)"
+    echo "$pprefix: $(sync;du -h $outputdir/$ramfs)"
     rm -rf /tmp/initramfs
     chmod 0666 $outputdir/vmlinuz-*.emt3 $outputdir/initramfs-*.emt3.img
 }
